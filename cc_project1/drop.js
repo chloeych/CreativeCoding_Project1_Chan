@@ -1,14 +1,14 @@
 function Drop() {
 
   this.x = random(320,980);
-  this.y = random(60,340);
+  this.y = random(60,355);
   this.yspeed = 1;
 
   this.fall = function() {
     this.y = this.y + this.yspeed;
 
     if (this.y > 370){
-      this.y = random (70, 90);
+      this.y = random (65, 70);
     }
   }
 

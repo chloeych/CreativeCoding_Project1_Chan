@@ -63,15 +63,7 @@ function visualScreen(){
 }
 
 
-function remote(){
-  fill(22,24,23);
-  quad(575, 600, 725, 600, 785, 900, 515, 900) // Remote
-  fill(0,100);
-  noStroke();
-  ellipse(600,625,30); // powerBtn shadow
-  fill(198,7,7);// red
-  ellipse(600,625,25);// powerBtn
-}
+
 
 function rain(){
   for (let i = 0; i < raindrops.length; i++) {
