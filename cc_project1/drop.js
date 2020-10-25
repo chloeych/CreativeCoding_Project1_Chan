@@ -14,6 +14,13 @@ function Drop() {
 
   this.show = function() {
     stroke(100);
+    strokeWeight(1);
+    line(this.x, this.y, this.x, this.y+10);
+  }
+
+  this.color = function(){
+    stroke(255);
+    strokeWeight(1);
     line(this.x, this.y, this.x, this.y+10);
   }
 
