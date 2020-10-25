@@ -17,13 +17,18 @@ let colorBtn;
 // Button Creation
 let muteButton;
 let volumeUpButton;
-let volumeDownButton
+let volumeDownButton;
+let colorMuteButton;
+let channelUpButton;
 
 // Button Functionality
-let counter = 0;
+let muteCounter = 0;
 let colorCounter = 0;
-let soundGraphicOpacity = 255;
+let channelCounter = 0;
+let soundGraphicOpacity = 0;
 let volLevel = 550;
+let pitterPatterSize = 10;
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -37,6 +42,12 @@ function setup() {
   volUp = new VolUp();
   volDown = new VolDown();
   colorBtn = new ColorBtn();
+  // Functionality Buttons
+  BtnMute();
+  BtnVolup();
+  BtnVoldown();
+  BtnColor();
+  BtnChannelUp();
 }
 
 function draw() {
@@ -57,10 +68,6 @@ function draw() {
   volDown.display();
   colorBtn.display();
 
-  // Functionality Buttons
-  BtnMute();
-  BtnVolup();
-  BtnVoldown();
 }
 
 function speakers(){
@@ -114,13 +121,6 @@ function rain(){
   }
 }
 
-function soundGraphics(){
-  fill(0, soundGraphicOpacity);
-  stroke(0, soundGraphicOpacity);
-  text('BOOM', 10, 10);
-  rect(10, 10, 10, 10);
-}
-
 function BtnMute(){
   muteButton = createButton(" ");
   muteButton.position(625,720);
@@ -129,25 +129,22 @@ function BtnMute(){
   muteButton.style('width', '50px');
   muteButton.style('height', '20px');
   muteButton.style('border-style', 'none');
-  muteButton.style('border-style', 'none');
   muteButton.style('cursor', 'pointer');
 }
 
 function muteBtnClicked(){
-  counter += 1;
-  if (counter == 1){
+  muteCounter += 1;
+
+  if (muteCounter == 1){
     soundGraphicOpacity = 255;
   }
-  if (counter == 2){
+  if (muteCounter == 2){
     soundGraphicOpacity = 0;
   }
-  if (counter == 3){
-    counter = 1;
+  if (muteCounter == 3 ){
+    muteCounter = 1;
     soundGraphicOpacity = 255;
   }
-  console.log(soundGraphicOpacity);
-  console.log('clicked');
-  console.log(counter);
 }
 
 function volumeGraphics(){
@@ -170,14 +167,15 @@ function BtnVolup(){
   volumeUpButton.style('width', '20px');
   volumeUpButton.style('height', '20px');
   volumeUpButton.style('border-style', 'none');
-  volumeUpButton.style('border-style', 'none');
   volumeUpButton.style('cursor', 'pointer');
 }
 
 function volUpClicked(){
   volLevel += 5;
-  if (volLevel >= 750){
+  pitterPatterSize += 2;
+  if (volLevel >= 750 || pitterPatterSize >= 40){
     volLevel = 750;
+    pitterPatterSize = 40;
   }
 }
 
@@ -189,13 +187,92 @@ function BtnVoldown(){
   volumeDownButton.style('width', '20px');
   volumeDownButton.style('height', '20px');
   volumeDownButton.style('border-style', 'none');
-  volumeDownButton.style('border-style', 'none');
   volumeDownButton.style('cursor', 'pointer');
 }
 
 function volDownClicked(){
   volLevel -= 5;
-  if (volLevel <= 550){
+  pitterPatterSize -= 2;
+  if (volLevel <= 550 || pitterPatterSize <= 10){
     volLevel = 550;
+    pitterPatterSize = 10;
   }
+}
+
+function BtnColor(){
+  colorMuteButton = createButton("  ");
+  colorMuteButton.position(620,545);
+  colorMuteButton.mousePressed(colorMuteClicked);
+  colorMuteButton.style('backgroundColor', color(0,0));
+  colorMuteButton.style('width', '60px');
+  colorMuteButton.style('height', '25px');
+  colorMuteButton.style('border-style', 'none');
+  colorMuteButton.style('cursor', 'pointer');
+}
+
+function colorMuteClicked(){
+  colorCounter += 1;
+  for (let i = 0; i < raindrops.length; i++) {
+    if (colorCounter == 1){
+      raindrops[i].col = color(14,47,68);
+    }
+    if  (colorCounter == 2){
+      raindrops[i].col = color(150);
+    }
+    if (colorCounter == 3){
+      colorCounter = 1;
+      raindrops[i].col = color(14,47,68);
+    }
+  }
+}
+
+function BtnChannelUp(){
+  channelUpButton = createButton("  ");
+  channelUpButton.position(690, 695);
+  channelUpButton.mousePressed(channelUpClicked);
+  channelUpButton.style('backgroundColor', color(0,0));
+  channelUpButton.style('width', '20px');
+  channelUpButton.style('height', '20px');
+  channelUpButton.style('border-style', 'none');
+  channelUpButton.style('cursor', 'pointer');
+}
+
+function channelUpClicked(){
+  channelCounter += 1;
+  for (let i = 0; i < raindrops.length; i++) {
+    if (channelCounter == 1){
+      raindrops[i].col = color(14,47,68,0);
+    }
+    if  (channelCounter == 2){
+      raindrops[i].col = color(150,255);
+    }
+    if (channelCounter == 3){
+      channelCounter = 1;
+      raindrops[i].col = color(14,47,68,0);
+    }
+  }
+}
+
+function soundGraphics(){
+  fill(0, soundGraphicOpacity);
+  stroke(0, soundGraphicOpacity);
+  textSize(pitterPatterSize);
+  text("pitter", 200, 300);
+  text("patter", 300, 500);
+  text("pitter", 1100, 300);
+  text("patter", 900, 500);
+  textSize(pitterPatterSize + 10);
+  text("pitter", 100, 300);
+  text("patter", 200, 500);
+  text("pitter", 1200, 300);
+  text("patter", 1000, 500);
+
+  if (muteCounter == 1){
+  soundGraphicOpacity += 2;
+
+  if (soundGraphicOpacity >= 255){
+    soundGraphicOpacity = 5;
+  }
+  }
+  console.log(soundGraphicOpacity);
 }
