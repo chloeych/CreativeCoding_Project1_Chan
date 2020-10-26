@@ -28,6 +28,7 @@ let channelCounter = 0;
 let soundGraphicOpacity = 0;
 let volLevel = 550;
 let pitterPatterSize = 10;
+let bCol = 0;
 
 
 function setup() {
@@ -43,11 +44,11 @@ function setup() {
   volDown = new VolDown();
   colorBtn = new ColorBtn();
   // Functionality Buttons
-  BtnMute();
   BtnVolup();
   BtnVoldown();
   BtnColor();
   BtnChannelUp();
+  BtnMute();
 }
 
 function draw() {
@@ -95,13 +96,30 @@ function speakerMovement(){
   ellipse(1150,620,150); // Bottom Ellipse Shadow
   ellipse (1150,450,110); // Top Ellipse
 
-  // Boom Movement
-  boomBottom += 0.5;
-  boomTop += 0.5;
 
-  if (boomBottom == 140 && boomTop == 100){
+  // Boom Movement
+  if (muteCounter == 1){
+    boomBottom += 0.5;
+    boomTop += 0.5;
+
+    if (boomBottom == 140 && boomTop == 100){
+      boomBottom = 130;
+      boomTop = 90;
+    }
+  }
+  if (muteCounter == 2){
     boomBottom = 130;
     boomTop = 90;
+  }
+  if (muteCounter == 3 ){
+    muteCounter = 1;
+    boomBottom += 0.5;
+    boomTop += 0.5;
+
+    if (boomBottom == 140 && boomTop == 100){
+      boomBottom = 130;
+      boomTop = 90;
+    }
   }
 }
 
@@ -109,7 +127,7 @@ function visualScreen(){
   noStroke();
   fill(22,24,23);
   rect(300, 50, 700, 350); // TV
-  fill(0);
+  fill(bCol);
   rect(315, 65, 670, 320);
 }
 
@@ -173,9 +191,9 @@ function BtnVolup(){
 function volUpClicked(){
   volLevel += 5;
   pitterPatterSize += 2;
-  if (volLevel >= 750 || pitterPatterSize >= 40){
+  if (volLevel >= 750 || pitterPatterSize >= 50){
     volLevel = 750;
-    pitterPatterSize = 40;
+    pitterPatterSize = 50;
   }
 }
 
@@ -214,17 +232,21 @@ function colorMuteClicked(){
   colorCounter += 1;
   for (let i = 0; i < raindrops.length; i++) {
     if (colorCounter == 1){
-      raindrops[i].col = color(14,47,68);
+      raindrops[i].col = color(237,32,141);
+      bCol = '#cefbff';
     }
     if  (colorCounter == 2){
       raindrops[i].col = color(150);
+      bCol = 0;
     }
     if (colorCounter == 3){
       colorCounter = 1;
-      raindrops[i].col = color(14,47,68);
+      raindrops[i].col = color(237,32,141);
+      bCol = '#cefbff'
     }
   }
 }
+
 
 function BtnChannelUp(){
   channelUpButton = createButton("  ");
@@ -257,15 +279,15 @@ function soundGraphics(){
   fill(0, soundGraphicOpacity);
   stroke(0, soundGraphicOpacity);
   textSize(pitterPatterSize);
-  text("pitter", 200, 300);
-  text("patter", 300, 500);
   text("pitter", 1100, 300);
-  text("patter", 900, 500);
+  text("patter", 200, 300);
+  text("pitter", 900, 600);
+  text("patter", 300, 600);
   textSize(pitterPatterSize + 10);
-  text("pitter", 100, 300);
-  text("patter", 200, 500);
-  text("pitter", 1200, 300);
-  text("patter", 1000, 500);
+  text("patter", 1200, 300);
+  text("pitter", 150, 250);
+  text("pitter", 350, 500);
+  text("patter", 950, 500);
 
   if (muteCounter == 1){
   soundGraphicOpacity += 2;
@@ -274,5 +296,4 @@ function soundGraphics(){
     soundGraphicOpacity = 5;
   }
   }
-  console.log(soundGraphicOpacity);
 }
