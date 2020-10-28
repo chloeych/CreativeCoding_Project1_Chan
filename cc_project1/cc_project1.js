@@ -2,8 +2,14 @@
 // Speakers
 let boomTop = 90;
 let boomBottom = 130;
+
 //Screen Graphics
 let raindrops = [];
+let musicnotes;
+let mnX = [300, 120, 200, 950, 1200, 1100];
+let mnY = [500, 250, 220, 420, 280, 250];
+let personGraphic = 0;
+let crackedOpacity = 0;
 
 // Remote
 let remote;
@@ -20,7 +26,6 @@ let volumeUpButton;
 let volumeDownButton;
 let colorMuteButton;
 let channelUpButton;
-
 // Button Functionality
 let muteCounter = 0;
 let colorCounter = 0;
@@ -31,12 +36,12 @@ let pitterPatterSize = 10;
 let bCol = 0;
 let mutedPersonOpacity = 0;
 
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
   for (let i = 0; i < 500; i++) {
     raindrops[i] = new Drop();
   }
+  musicnotes = new MusicGraphics();
   remote = new Remote();
   channelDown = new ChannelDown();
   channelUp = new ChannelUp();
@@ -44,6 +49,7 @@ function setup() {
   volUp = new VolUp();
   volDown = new VolDown();
   colorBtn = new ColorBtn();
+
   // Functionality Buttons
   BtnVolup();
   BtnVoldown();
@@ -62,6 +68,7 @@ function draw() {
   volumeGraphics();
   mutedPerson();
   colorButtons();
+
   // Remote Components
   remote.display();
   channelDown.display();
@@ -71,9 +78,12 @@ function draw() {
   volDown.display();
   colorBtn.display();
 
+  // Graphics
+  musicNotesDisplay();
 }
 
 function speakers(){
+  noStroke();
   fill(22,24,23);
   rect(50,350,200,400) // Left Speaker
   rect(1050,350,200,400) // Right Speakers
@@ -142,6 +152,9 @@ function rain(){
 }
 
 function mutedPerson(){
+
+  personGraphic += 2;
+
   stroke(255, mutedPersonOpacity);
   noFill();
   ellipse (650, 200, 150);
@@ -157,7 +170,28 @@ function mutedPerson(){
   ellipse(800, 150, 80, 40); // word bubble
   strokeWeight(3);
   triangle(770, 160, 810, 160, 760, 200);
+  // broken screen
+  stroke(255, crackedOpacity);
+  line(650, 66, 700, 200);
+  line(680, 380, 750, 200);
+  line(700,200, 750, 200);
 
+
+  if (personGraphic >= 0 && channelCounter == 2){
+    crackedOpacity = 0;
+    mutedPersonOpacity = 255;
+  }
+
+  if (personGraphic >= 400 && channelCounter == 2){
+    mutedPersonOpacity = 0;
+    crackedOpacity = 255;
+  }
+
+  if (personGraphic >= 420 && channelCounter == 2){
+    personGraphic = 0;
+    crackedOpacity = 0;
+    mutedPersonOpacity = 255;
+  }
 }
 
 function BtnMute(){
@@ -211,10 +245,8 @@ function BtnVolup(){
 
 function volUpClicked(){
   volLevel += 5;
-  pitterPatterSize += 2;
-  if (volLevel >= 750 || pitterPatterSize >= 50){
+  if (volLevel >= 750){
     volLevel = 750;
-    pitterPatterSize = 50;
   }
 }
 
@@ -231,10 +263,8 @@ function BtnVoldown(){
 
 function volDownClicked(){
   volLevel -= 5;
-  pitterPatterSize -= 2;
-  if (volLevel <= 550 || pitterPatterSize <= 10){
+  if (volLevel <= 550){
     volLevel = 550;
-    pitterPatterSize = 10;
   }
 }
 
@@ -255,18 +285,22 @@ function channelUpClicked(){
     if (channelCounter == 1){
       raindrops[i].col = color(150,255);
       mutedPersonOpacity = 0;
+      crackedOpacity = 0;
     }
     if  (channelCounter == 2){
       raindrops[i].col = color(150,0);
       mutedPersonOpacity = 255;
+      crackedOpacity = 0;
     }
     if (channelCounter == 3){
       channelCounter = 1;
       raindrops[i].col = color(150,255);
       mutedPersonOpacity = 0;
+      crackedOpacity = 0;
     }
   }
 }
+
 
 function BtnColor(){
   colorMuteButton = createButton("  ");
@@ -285,18 +319,6 @@ function colorMuteClicked(){
 
 
 function soundGraphics(){
-  fill(0, soundGraphicOpacity);
-  stroke(0, soundGraphicOpacity);
-  textSize(pitterPatterSize);
-  text("pitter", 1100, 300);
-  text("patter", 200, 300);
-  text("pitter", 900, 600);
-  text("patter", 300, 600);
-  textSize(pitterPatterSize + 10);
-  text("patter", 1200, 300);
-  text("pitter", 150, 250);
-  text("pitter", 350, 500);
-  text("patter", 950, 500);
 
   if (muteCounter == 1){
   soundGraphicOpacity += 2;
@@ -333,4 +355,10 @@ function colorButtons(){
       bCol = '#d08442';
       colorCounter = 1;
     }
+}
+
+function musicNotesDisplay(){
+  for (i=0; i<6 ; i++){
+  musicnotes.display(mnX[i], mnY[i]);
+  }
 }

@@ -1,12 +1,12 @@
 function Remote(){
   this.display = function(){
 
+  noStroke();
   fill(22,24,23);
   rect(560, 500, 175, 400, 20); // Remote
   fill(0,100);
 
   // Remote Buttons
-  noStroke();
   ellipse(600,525,30); // powerBtn shadow
   fill(198,7,7);// red
   ellipse(600,525,25);// powerBtn
