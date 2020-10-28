@@ -1,5 +1,5 @@
 function Drop() {
-  this.col = color(150);
+  this.col = color(0);
   this.x = random(320,980);
   this.y = random(60,355);
   this.yspeed = 1;
